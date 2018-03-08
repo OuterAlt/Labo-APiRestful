@@ -1,0 +1,46 @@
+{% extends "base.html.twig" %}
+
+{% block body %}
+    <div class="pricing-header px-3 py-3 pt-md-5 pb-md-4 mx-auto text-center">
+        <h1 class="display-4">
+            API Restful
+        </h1>
+        <p class="lead">
+            Quelques tests rapide pour faire des appels API.
+        </p>
+    </div>
+
+
+    <div class="container">
+        <div class="row">
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Ajout d'un utilisateur
+                    </h5>
+                    <p class="card-text">
+                        Méthode en POST pour l'ajout d'un utilisateur
+                    </p>
+                    <a href="{{ path("user_create") }}" class="btn btn-primary">
+                        Créer un utilisateur
+                    </a>
+                </div>
+            </div>
+
+            <div class="card" style="width: 18rem;">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        Listing des utilisateurs
+                    </h5>
+                    <p class="card-text">
+                        Méthode en GET pour récupérer les utilisateurs.
+                    </p>
+                    <a href="{{ path("user_get_list") }}" class="btn btn-primary">
+                        Liste des utilisateurs
+                    </a>
+                </div>
+            </div>
+
+        </div>
+    </div>
+{% endblock %}

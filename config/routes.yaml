@@ -1,3 +1,3 @@
-#index:
-#    path: /
-#    controller: App\Controller\DefaultController::index
+core_router:
+    resource: "%kernel.root_dir%/../Routing/routing.yaml"
+    prefix: /
