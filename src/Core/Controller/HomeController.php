@@ -6,13 +6,17 @@
  * Time: 22:58
  */
 
-namespace App\Controller;
+namespace App\Core\Controller;
 
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
+/**
+ * Class HomeController
+ * @package App\Core\Controller
+ */
 class HomeController extends Controller
 {
     /**

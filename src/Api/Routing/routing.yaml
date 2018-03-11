@@ -1,0 +1,19 @@
+user_list:
+    methods: [ GET ]
+    path: utilisateurs
+    controller: App\Api\Controller\UserController::listAction
+
+user_show:
+    methods: [ GET ]
+    path: utilisateurs/{userId}
+    controller: App\Api\Controller\UserController::showAction
+
+user_create:
+    methods: [ POST ]
+    path: utilisateurs
+    controller: App\Api\Controller\UserController::newAction
+
+user_edit:
+    methods: [ PUT ]
+    path: utilisateurs/{userId}
+    controller: App\Api\Controller\UserController::editAction

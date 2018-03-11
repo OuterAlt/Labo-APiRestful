@@ -1,3 +1,7 @@
 core_router:
-    resource: "%kernel.root_dir%/../Routing/routing.yaml"
+    resource: "%kernel.root_dir%/../Core/Routing/routing.yaml"
     prefix: /
+
+api_router:
+    resource: "%kernel.root_dir%/../Api/Routing/routing.yaml"
+    prefix: /api/

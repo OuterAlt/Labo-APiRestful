@@ -1,11 +1,14 @@
 <?php
 
-namespace App\Entity;
+namespace App\Core\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Form\Extension\Core\DataTransformer\DateTimeToArrayTransformer;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\UserRepository")
+ * Class User
+ * @package App\Core\Entity
+ * @ORM\Entity(repositoryClass="App\Core\Repository\UserRepository")
  * @ORM\HasLifecycleCallbacks()
  */
 class User
@@ -151,8 +154,6 @@ class User
 
     /**
      * Setter for the "updatedAt" property.
-     *
-     * @param \DateTime $updatedAt
      *
      * @ORM\PrePersist()
      * @ORM\PreUpdate()

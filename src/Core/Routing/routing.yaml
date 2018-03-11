@@ -1,0 +1,13 @@
+core_homepage:
+    path: /
+    controller: App\Core\Controller\HomeController::indexAction
+
+core_user_create:
+    path: utilisateurs/nouveau
+    controller: App\Core\Controller\UserController::newAction
+    methods: [ GET, POST ]
+
+core_user_list:
+    path: utilisateurs/liste
+    controller: App\Core\Controller\UserController::listAction
+    methods: [ GET ]

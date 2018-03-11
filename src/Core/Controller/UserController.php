@@ -6,46 +6,47 @@
  * Time: 23:41
  */
 
-namespace App\Controller;
+namespace App\Core\Controller;
 
 
-use App\Entity\User;
-use App\Form\UserType;
+use App\Core\Entity\User;
+use App\Core\Form\UserType;
 use Doctrine\ORM\EntityManagerInterface;
+use GuzzleHttp\Client;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Twig\Environment;
 
+/**
+ * Class UserController
+ * @package App\Core\Controller
+ */
 class UserController extends Controller
 {
+    const apiBaseUrl = "http://127.0.0.1/api/";
 
     public function listAction(
         Request $request
     ) {
-        $response = $this->forward("App\Controller\ApiController::getAction");
-
-        $jmsSerializer = $this->get("jms_serializer");
-
-        /**
-         * @var User[] $users
-         */
-        $users = $jmsSerializer->deserialize(
-            $response->getContent(),
-            "array",
-            "json"
+        $guzzleClient = new Client(
+            array(
+                "base_uri" => self::apiBaseUrl
+            )
         );
 
-        dump($response);
+        $users = $guzzleClient->get("utilisateurs");
+
         dump($users); die;
     }
 
     /**
-     * Creation of a new user
+     * Create a new user
      *
      * @param \Twig\Environment                            $twig
      * @param \Symfony\Component\Form\FormFactoryInterface $formFactory
+     * @param \Doctrine\ORM\EntityManagerInterface         $entityManager
      * @param \Symfony\Component\HttpFoundation\Request    $request
      *
      * @return \Symfony\Component\HttpFoundation\Response
@@ -70,16 +71,23 @@ class UserController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
+            $guzzleClient = new Client(
+                array(
+                    "base_uri" => self::apiBaseUrl
+                )
+            );
 
             $jmsSerializer = $this->get("jms_serializer");
-            $data = $jmsSerializer->serialize($request->request->get("user"), "json");
 
-            $response = new Response($data);
-            $response->headers->set('Content-Type', 'application/json');
+            $response = $guzzleClient->post("utilisateurs", [
+                'debug' => false,
+                'body' => $jmsSerializer->serialize($user, "json"),
+                'headers' => [
+                    'Content-Type' => 'application/json',
+                ]
+            ]);
 
-            return $response;
+            dump($response); die;
         }
 
         return new Response(
