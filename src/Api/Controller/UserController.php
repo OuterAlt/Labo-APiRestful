@@ -16,6 +16,9 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Serializer\Encoder\JsonEncoder;
+use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
+use Symfony\Component\Serializer\Serializer;
 
 /**
  * Class UserController
@@ -77,14 +80,16 @@ class UserController extends Controller
     ): Response {
         if ($request->isMethod("POST")) {
             try {
-                $jmsSerializer = $this->get("jms_serializer");
+                $encoders = array(new JsonEncoder());
+                $normalizers = array(new ObjectNormalizer());
+                $serializer = new Serializer($normalizers, $encoders);
 
                 $rawData = $request->getContent();
 
                 /**
                  * @var User $user
                  */
-                $user = $jmsSerializer->deserialize(
+                $user = $serializer->deserialize(
                     $rawData,
                     User::class,
                     "json"
@@ -161,7 +166,9 @@ class UserController extends Controller
     ): Response {
         if ($request->isMethod("PUT")) {
             try {
-                $jmsSerializer = $this->get("jms_serializer");
+                $encoders = array(new JsonEncoder());
+                $normalizers = array(new ObjectNormalizer());
+                $serializer = new Serializer($normalizers, $encoders);
 
                 $initialUserData = $entityManager->getRepository(User::class)->find($userId);
 
@@ -170,11 +177,12 @@ class UserController extends Controller
                 /**
                  * @var User $user
                  */
-                $newUserData = $jmsSerializer->deserialize(
+                $newUserData = $serializer->deserialize(
                     $rawUserData,
                     User::class,
                     "json"
                 );
+
 
                 $user = $this->updateUserProperties($initialUserData, $newUserData);
 
@@ -200,18 +208,18 @@ class UserController extends Controller
      * Update the current user entity with the new user entity datas.
      *
      * @param \App\Core\Entity\User $initialUserData
-     * @param \App\Core\Entity\User $newUserData
+     * @param object|User $newUserData
      *
      * @return \App\Core\Entity\User
      */
     public function updateUserProperties(
         User $initialUserData,
-        User $newUserData
+        $newUserData
     ): User {
         $initialUserData
             ->setFirstname($newUserData->getFirstname())
             ->setLastname($newUserData->getLastname())
-            ;
+        ;
 
         return $initialUserData;
     }
